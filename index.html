@@ -12,6 +12,7 @@
             --container-bg: #222222;
             --accent-color: #00ccff;
             --border-color: #333333;
+            --sidebar-bg: #151515;
             --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
@@ -21,12 +22,100 @@
             font-family: var(--font-family);
             background-color: var(--background-dark);
             color: var(--primary-text-color);
+            display: flex; /* Möjliggör sidebar + content brevid varandra */
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 40px 0;
+            position: fixed;
+            height: 100%;
+            z-index: 100;
+        }
+
+        .logo-section {
+            padding: 0 30px 40px 30px;
+            text-align: center;
+        }
+
+        .sidebar-logo {
+            max-width: 180px;
+            height: auto;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .nav-link {
+            display: block;
+            padding: 15px 30px;
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #222;
+            color: var(--accent-color);
+        }
+
+        /* Undermeny */
+        .submenu {
+            list-style: none;
+            padding: 0;
+            background: #111;
+            display: none; /* Dölj som standard */
+        }
+
+        .submenu li a {
+            display: block;
+            padding: 12px 30px 12px 50px;
+            color: var(--secondary-text-color);
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: 0.2s;
+        }
+
+        .submenu li a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Visa undermeny vid aktiv klass */
+        .has-submenu.active .submenu {
+            display: block;
+        }
+
+        .has-submenu .nav-link::after {
+            content: ' ▼';
+            font-size: 0.7em;
+            float: right;
+            margin-top: 5px;
+        }
+
+        /* --- HUVUDINNEHÅLL --- */
+        .main-content {
+            margin-left: 280px; /* Samma som sidebar bredd */
+            flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            line-height: 1.6;
-            position: relative;
+            padding: 40px;
         }
 
         .container {
@@ -36,15 +125,8 @@
             padding: 40px 50px;
             text-align: center;
             max-width: 600px;
-            width: 90%;
-            z-index: 10;
+            width: 100%;
             border: 1px solid var(--border-color);
-        }
-
-        .logo-img {
-            max-width: 250px;
-            height: auto;
-            margin-bottom: 20px;
         }
 
         h1 {
@@ -67,6 +149,12 @@
             border-radius: 6px;
             text-decoration: none;
             font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
 
         .footer {
@@ -74,20 +162,63 @@
             font-size: 0.8em;
             color: #555;
         }
+
+        /* Responsivitet för mindre skärmar */
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { position: relative; width: 100%; height: auto; }
+            .main-content { margin-left: 0; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="hetza_logga_vit_t.png" alt="HETZA Logo" class="logo-img">
+
+    <aside class="sidebar">
+        <div class="logo-section">
+            <img src="hetza_logga_vit_t.png" alt="HETZA Logo" class="sidebar-logo">
+        </div>
         
-        <h1>HETZA</h1>
-        <p>
-            Välkommen till en plattform designad för effektivitet och analys. 
-            Vi strävar efter att leverera precision i varje detalj med fokus 
-            på optimering och prestanda.
-        </p>
-        <a href="#" class="button">Kom igång</a>
-        <p class="footer">© 2024 HETZA. Alla rättigheter reserverade.</p>
-    </div>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item has-submenu" id="software-menu">
+                    <div class="nav-link">Mjukvaror</div>
+                    <ul class="submenu">
+                        <li><a href="#">HETZA-grid</a></li>
+                        <li><a href="#">HETZA-RA</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Konsulttjänster</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Om oss</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Kontakt</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="container">
+            <h1>HETZA</h1>
+            <p>
+                Välkommen till en plattform designad för effektivitet och analys. 
+                Vi strävar efter att leverera precision i varje detalj med fokus 
+                på optimering och prestanda.
+            </p>
+            <a href="#" class="button">Kom igång</a>
+            <p class="footer">© 2024 HETZA. Alla rättigheter reserverade.</p>
+        </div>
+    </main>
+
+    <script>
+        // Funktion för att öppna/stänga undermenyn
+        document.getElementById('software-menu').addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    </script>
+
 </body>
 </html>
