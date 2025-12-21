@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HETZA - Modern Design</title>
+    <title>HETZA - Portalen</title>
     <style>
         :root {
             --primary-text-color: #f0f0f0;
@@ -22,9 +22,10 @@
             font-family: var(--font-family);
             background-color: var(--background-dark);
             color: var(--primary-text-color);
-            display: flex; /* Möjliggör sidebar + content brevid varandra */
+            display: flex;
             min-height: 100vh;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         /* --- SIDEBAR --- */
@@ -43,6 +44,7 @@
         .logo-section {
             padding: 0 30px 40px 30px;
             text-align: center;
+            cursor: pointer;
         }
 
         .sidebar-logo {
@@ -56,10 +58,6 @@
             margin: 0;
         }
 
-        .nav-item {
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
         .nav-link {
             display: block;
             padding: 15px 30px;
@@ -68,6 +66,7 @@
             font-weight: 500;
             cursor: pointer;
             transition: 0.3s;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .nav-link:hover {
@@ -75,12 +74,11 @@
             color: var(--accent-color);
         }
 
-        /* Undermeny */
         .submenu {
             list-style: none;
             padding: 0;
             background: #111;
-            display: none; /* Dölj som standard */
+            display: none; 
         }
 
         .submenu li a {
@@ -90,27 +88,21 @@
             text-decoration: none;
             font-size: 0.9em;
             transition: 0.2s;
+            cursor: pointer;
         }
 
         .submenu li a:hover {
             color: var(--accent-color);
+            background: #1a1a1a;
         }
 
-        /* Visa undermeny vid aktiv klass */
         .has-submenu.active .submenu {
             display: block;
         }
 
-        .has-submenu .nav-link::after {
-            content: ' ▼';
-            font-size: 0.7em;
-            float: right;
-            margin-top: 5px;
-        }
-
-        /* --- HUVUDINNEHÅLL --- */
+        /* --- CONTENT AREA --- */
         .main-content {
-            margin-left: 280px; /* Samma som sidebar bredd */
+            margin-left: 280px;
             flex-grow: 1;
             display: flex;
             justify-content: center;
@@ -118,52 +110,48 @@
             padding: 40px;
         }
 
+        /* Sektions-hantering */
+        .content-section {
+            display: none; /* Dölj alla sektioner som standard */
+            width: 100%;
+            max-width: 800px;
+            animation: fadeIn 0.5s;
+        }
+
+        .content-section.active {
+            display: block; /* Visa endast aktiv sektion */
+        }
+
         .container {
             background-color: var(--container-bg);
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             padding: 40px 50px;
             text-align: center;
-            max-width: 600px;
-            width: 100%;
             border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
-        h1 {
-            color: var(--primary-text-color);
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
+        /* App-placeholder stil */
+        .app-canvas {
+            background: #000;
+            border: 2px dashed var(--accent-color);
+            border-radius: 8px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--accent-color);
+            margin-top: 20px;
         }
 
-        p {
-            color: var(--secondary-text-color);
-            margin-bottom: 25px;
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        p { color: var(--secondary-text-color); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .button {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--background-dark);
-            padding: 10px 25px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .footer {
-            margin-top: 30px;
-            font-size: 0.8em;
-            color: #555;
-        }
-
-        /* Responsivitet för mindre skärmar */
         @media (max-width: 900px) {
             body { flex-direction: column; }
             .sidebar { position: relative; width: 100%; height: auto; }
@@ -174,50 +162,79 @@
 <body>
 
     <aside class="sidebar">
-        <div class="logo-section">
+        <div class="logo-section" onclick="showSection('home')">
             <img src="hetza_logga_vit_t.png" alt="HETZA Logo" class="sidebar-logo">
         </div>
         
         <nav>
             <ul class="nav-menu">
                 <li class="nav-item has-submenu" id="software-menu">
-                    <div class="nav-link">Mjukvaror</div>
+                    <div class="nav-link">Mjukvaror ▼</div>
                     <ul class="submenu">
-                        <li><a href="#">HETZA-grid</a></li>
-                        <li><a href="#">HETZA-RA</a></li>
+                        <li><a onclick="showSection('grid-app')">Kör HETZA-grid</a></li>
+                        <li><a onclick="showSection('ra-app')">Kör HETZA-RA</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Konsulttjänster</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Om oss</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Kontakt</a>
-                </li>
+                <li class="nav-item"><a onclick="showSection('konsult')" class="nav-link">Konsulttjänster</a></li>
+                <li class="nav-item"><a class="nav-link">Om oss</a></li>
+                <li class="nav-item"><a class="nav-link">Kontakt</a></li>
             </ul>
         </nav>
     </aside>
 
     <main class="main-content">
-        <div class="container">
-            <h1>HETZA</h1>
-            <p>
-                Välkommen till en plattform designad för effektivitet och analys. 
-                Vi strävar efter att leverera precision i varje detalj med fokus 
-                på optimering och prestanda.
-            </p>
-            <a href="#" class="button">Kom igång</a>
-            <p class="footer">© 2024 HETZA. Alla rättigheter reserverade.</p>
-        </div>
+        <section id="home" class="content-section active">
+            <div class="container">
+                <h1>HETZA Portal</h1>
+                <p>Välkommen till din central för analys och optimering. Välj en mjukvara i menyn för att starta applikationen direkt i webbläsaren.</p>
+            </div>
+        </section>
+
+        <section id="grid-app" class="content-section">
+            <div class="container">
+                <h1>HETZA-grid</h1>
+                <p>Applikationen körs nu online.</p>
+                <div class="app-canvas">
+                    [Här klistrar du in koden för GRID-mjukvaran]
+                </div>
+            </div>
+        </section>
+
+        <section id="ra-app" class="content-section">
+            <div class="container">
+                <h1>HETZA-RA</h1>
+                <p>Analysverktyget är redo.</p>
+                <div class="app-canvas">
+                    [Här klistrar du in koden för RA-mjukvaran]
+                </div>
+            </div>
+        </section>
+
+        <section id="konsult" class="content-section">
+            <div class="container">
+                <h1>Konsulttjänster</h1>
+                <p>Vi erbjuder expertis inom systemoptimering och dataanalys.</p>
+            </div>
+        </section>
     </main>
 
     <script>
-        // Funktion för att öppna/stänga undermenyn
-        document.getElementById('software-menu').addEventListener('click', function() {
-            this.classList.toggle('active');
+        // Fäll ut/in mjukvarumenyn
+        document.getElementById('software-menu').addEventListener('click', function(e) {
+            if(e.target.classList.contains('nav-link')) {
+                this.classList.toggle('active');
+            }
         });
+
+        // Funktion för att byta "sida" utan att ladda om
+        function showSection(sectionId) {
+            // Dölj alla sektioner
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(s => s.classList.remove('active'));
+
+            // Visa den valda sektionen
+            document.getElementById(sectionId).classList.add('active');
+        }
     </script>
 
 </body>
