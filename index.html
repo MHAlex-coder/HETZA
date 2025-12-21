@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HETZA - Portalen</title>
+    <title>HETZA - Portal</title>
     <style>
         :root {
             --primary-text-color: #f0f0f0;
@@ -74,6 +74,7 @@
             color: var(--accent-color);
         }
 
+        /* Undermeny */
         .submenu {
             list-style: none;
             padding: 0;
@@ -100,6 +101,13 @@
             display: block;
         }
 
+        .has-submenu .nav-link::after {
+            content: ' ▼';
+            font-size: 0.7em;
+            float: right;
+            margin-top: 5px;
+        }
+
         /* --- CONTENT AREA --- */
         .main-content {
             margin-left: 280px;
@@ -110,42 +118,46 @@
             padding: 40px;
         }
 
-        /* Sektions-hantering */
         .content-section {
-            display: none; /* Dölj alla sektioner som standard */
+            display: none;
             width: 100%;
-            max-width: 800px;
+            max-width: 700px;
             animation: fadeIn 0.5s;
         }
 
         .content-section.active {
-            display: block; /* Visa endast aktiv sektion */
+            display: block;
         }
 
         .container {
             background-color: var(--container-bg);
             border-radius: 12px;
-            padding: 40px 50px;
+            padding: 50px;
             text-align: center;
             border: 1px solid var(--border-color);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
-        /* App-placeholder stil */
-        .app-canvas {
-            background: #000;
-            border: 2px dashed var(--accent-color);
-            border-radius: 8px;
-            height: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* App-länk stil */
+        .app-link {
+            display: inline-block;
             color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2em;
             margin-top: 20px;
+            padding: 5px 0;
+            border-bottom: 1px solid transparent;
+            transition: 0.3s;
         }
 
-        h1 { font-size: 2.5em; margin-bottom: 10px; }
-        p { color: var(--secondary-text-color); }
+        .app-link:hover {
+            border-bottom: 1px solid var(--accent-color);
+            opacity: 0.8;
+        }
+
+        h1 { font-size: 2.5em; margin-bottom: 10px; letter-spacing: 1px; }
+        p { color: var(--secondary-text-color); font-size: 1.1em; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -154,8 +166,8 @@
 
         @media (max-width: 900px) {
             body { flex-direction: column; }
-            .sidebar { position: relative; width: 100%; height: auto; }
-            .main-content { margin-left: 0; }
+            .sidebar { position: relative; width: 100%; height: auto; padding: 20px 0; }
+            .main-content { margin-left: 0; padding: 20px; }
         }
     </style>
 </head>
@@ -163,77 +175,85 @@
 
     <aside class="sidebar">
         <div class="logo-section" onclick="showSection('home')">
-            <img src="hetza_logga_vit_t.png" alt="HETZA Logo" class="sidebar-logo">
+            <img src="hetza_logga_vit_t.png" alt="HETZA" class="sidebar-logo">
         </div>
         
         <nav>
             <ul class="nav-menu">
                 <li class="nav-item has-submenu" id="software-menu">
-                    <div class="nav-link">Mjukvaror ▼</div>
+                    <div class="nav-link">Mjukvaror</div>
                     <ul class="submenu">
-                        <li><a onclick="showSection('grid-app')">Kör HETZA-grid</a></li>
-                        <li><a onclick="showSection('ra-app')">Kör HETZA-RA</a></li>
+                        <li><a onclick="showSection('grid-app')">HETZA-grid</a></li>
+                        <li><a onclick="showSection('ra-app')">HETZA-RA</a></li>
                     </ul>
                 </li>
                 <li class="nav-item"><a onclick="showSection('konsult')" class="nav-link">Konsulttjänster</a></li>
-                <li class="nav-item"><a class="nav-link">Om oss</a></li>
-                <li class="nav-item"><a class="nav-link">Kontakt</a></li>
+                <li class="nav-item"><a onclick="showSection('home')" class="nav-link">Om oss</a></li>
+                <li class="nav-item"><a onclick="showSection('home')" class="nav-link">Kontakt</a></li>
             </ul>
         </nav>
     </aside>
 
     <main class="main-content">
+        
         <section id="home" class="content-section active">
             <div class="container">
-                <h1>HETZA Portal</h1>
-                <p>Välkommen till din central för analys och optimering. Välj en mjukvara i menyn för att starta applikationen direkt i webbläsaren.</p>
+                <h1>HETZA</h1>
+                <p>Välkommen till en plattform designad för effektivitet och analys. Välj en tjänst i menyn för att komma igång.</p>
             </div>
         </section>
 
         <section id="grid-app" class="content-section">
             <div class="container">
                 <h1>HETZA-grid</h1>
-                <p>Applikationen körs nu online.</p>
-                <div class="app-canvas">
-                    [Här klistrar du in koden för GRID-mjukvaran]
-                </div>
+                <p>Specialiserat verktyg för nätberäkning och systemoptimering.</p>
+                <a href="#" class="app-link" onclick="runApp('HETZA-grid')">Klicka här för att prova HETZA-grid</a>
             </div>
         </section>
 
         <section id="ra-app" class="content-section">
             <div class="container">
                 <h1>HETZA-RA</h1>
-                <p>Analysverktyget är redo.</p>
-                <div class="app-canvas">
-                    [Här klistrar du in koden för RA-mjukvaran]
-                </div>
+                <p>Analysera risk och tillförlitlighet med våra avancerade algoritmer.</p>
+                <a href="#" class="app-link" onclick="runApp('HETZA-RA')">Klicka här för att prova HETZA-RA</a>
             </div>
         </section>
 
         <section id="konsult" class="content-section">
             <div class="container">
                 <h1>Konsulttjänster</h1>
-                <p>Vi erbjuder expertis inom systemoptimering och dataanalys.</p>
+                <p>Vi erbjuder teknisk rådgivning och skräddarsydda analyslösningar för din verksamhet.</p>
             </div>
         </section>
+
     </main>
 
     <script>
-        // Fäll ut/in mjukvarumenyn
+        // Hantera utfällning av menyn
         document.getElementById('software-menu').addEventListener('click', function(e) {
+            // Förhindra att undermenyn stängs om man klickar på länkarna inuti den
             if(e.target.classList.contains('nav-link')) {
                 this.classList.toggle('active');
             }
         });
 
-        // Funktion för att byta "sida" utan att ladda om
+        // Funktion för att byta mellan sektioner
         function showSection(sectionId) {
-            // Dölj alla sektioner
+            // Ta bort 'active' från alla sektioner
             const sections = document.querySelectorAll('.content-section');
             sections.forEach(s => s.classList.remove('active'));
 
             // Visa den valda sektionen
-            document.getElementById(sectionId).classList.add('active');
+            const activeSection = document.getElementById(sectionId);
+            if(activeSection) {
+                activeSection.classList.add('active');
+            }
+        }
+
+        // Demo-funktion när man klickar på "Prova"
+        function runApp(appName) {
+            alert("Startar demo-miljö för " + appName + "...");
+            // Här kan du senare lägga till kod som faktiskt öppnar ditt verktyg
         }
     </script>
 
