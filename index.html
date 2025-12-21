@@ -173,6 +173,18 @@
             margin-top: 30px;
         }
 
+        .no-it-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
         h1 { font-size: 2.5em; margin-bottom: 10px; letter-spacing: 1px; text-align: center; }
         p { color: var(--secondary-text-color); font-size: 1.1em; }
 
@@ -223,31 +235,32 @@
 
         <section id="grid-app" class="content-section">
             <div class="container">
+                <div style="text-align: center;"><span class="no-it-badge">Ingen IT-installation krävs</span></div>
                 <h1 style="color: var(--accent-color);">HETZA-grid</h1>
-                <p style="text-align: center; font-size: 1.2em; color: var(--primary-text-color);">Optimera din leveranskapacitet med precision.</p>
+                <p style="text-align: center; font-size: 1.2em; color: var(--primary-text-color);">Optimera din leveranskapacitet direkt i webbläsaren.</p>
                 
                 <div class="grid-features">
                     <div class="feature-item">
+                        <h3>Omedelbar Start</h3>
+                        <p>Glöm långa väntetider på IT-godkännande. Ladda ned webapplikationen och börja planera direkt utan installation.</p>
+                    </div>
+                    <div class="feature-item">
                         <h3>Strategisk Planering</h3>
-                        <p>Visualisera hela årets projektportfölj. HETZA-grid ger full kontroll över beläggning på dags- och årsbasis.</p>
+                        <p>Visualisera hela årets projektportfölj. Få full kontroll över beläggning på dags-, vecko- och årsbasis.</p>
                     </div>
                     <div class="feature-item">
-                        <h3>Resursoptimering</h3>
-                        <p>Identifiera flaskhalsar direkt. Färgkodning visar när teamet är överbelastat eller har ledig kapacitet.</p>
+                        <h3>Kvalitetsförluster</h3>
+                        <p>Logga omarbete och "waste". Identifiera mönster och förbättringsområden med detaljerade rapporter.</p>
                     </div>
                     <div class="feature-item">
-                        <h3>Kvalitetsanalys</h3>
-                        <p>Logga "waste" och kvalitetsförluster. Omvandla omarbete till mätbar data för förbättring.</p>
-                    </div>
-                    <div class="feature-item">
-                        <h3>Insiktsfulla Rapporter</h3>
-                        <p>Generera djupgående analyser av avbrott och beläggning. Exportera beslutsunderlag till Excel.</p>
+                        <h3>Säker Data</h3>
+                        <p>All planering och data sparas lokalt i din webbläsare eller som JSON-filer. Ingen molnlagring krävs för driften.</p>
                     </div>
                 </div>
 
                 <div class="cta-box">
-                    <h2 style="margin-top: 0;">Redo att ta kontroll?</h2>
-                    <p>Upplev ett snabbare sätt att planera med stöd för svenska helgdagar, kommentarer och historik.</p>
+                    <h2 style="margin-top: 0;">Frihet att fokusera</h2>
+                    <p>HETZA-grid är byggt för att köras lokalt i din miljö. Ingen administratörsrättighet krävs – bara öppna och kör.</p>
                     <a href="#" class="app-link" onclick="runApp('HETZA-grid')">🚀 Klicka här för att prova HETZA-grid Online</a>
                 </div>
             </div>
@@ -255,23 +268,24 @@
 
         <section id="ra-app" class="content-section">
             <div class="container">
+                <div style="text-align: center;"><span class="no-it-badge">Körs direkt i webbläsaren</span></div>
                 <h1 style="color: var(--accent-color);">HETZA-RA</h1>
                 <p style="text-align: center; font-size: 1.2em; color: var(--primary-text-color);">Avancerad Risk- och Tillförlitlighetsanalys.</p>
                 
                 <div class="grid-features">
                     <div class="feature-item">
-                        <h3>Riskidentifiering</h3>
-                        <p>Kartlägg potentiella sårbarheter i komplexa system med våra specialiserade algoritmer.</p>
+                        <h3>Ingen IT-process</h3>
+                        <p>Slipp krångliga säkerhetsgranskningar för lokala installationer. Applikationen körs som en lättviktig webbfil.</p>
                     </div>
                     <div class="feature-item">
-                        <h3>Sannolikhetskalkyl</h3>
-                        <p>Beräkna tillförlitlighet över tid och identifiera kritiska felpunkter i din infrastruktur.</p>
+                        <h3>Riskidentifiering</h3>
+                        <p>Kartlägg potentiella sårbarheter i komplexa system med specialiserade algoritmer direkt vid skrivbordet.</p>
                     </div>
                 </div>
 
                 <div class="cta-box">
-                    <h2 style="margin-top: 0;">Säkra din drift</h2>
-                    <p>Få de insikter som krävs för att minimera oplanerade avbrott och maximera drifttid.</p>
+                    <h2 style="margin-top: 0;">Säkra din drift idag</h2>
+                    <p>Få de insikter som krävs för att minimera oplanerade avbrott utan att behöva involvera en it-avdelning för godkännande.</p>
                     <a href="#" class="app-link" onclick="runApp('HETZA-RA')">🔍 Klicka här för att prova HETZA-RA Online</a>
                 </div>
             </div>
@@ -287,14 +301,12 @@
     </main>
 
     <script>
-        // Hantera utfällning av menyn
         document.getElementById('software-menu').addEventListener('click', function(e) {
             if(e.target.classList.contains('nav-link')) {
                 this.classList.toggle('active');
             }
         });
 
-        // Funktion för att byta mellan sektioner
         function showSection(sectionId) {
             const sections = document.querySelectorAll('.content-section');
             sections.forEach(s => s.classList.remove('active'));
@@ -306,9 +318,8 @@
             }
         }
 
-        // Demo-funktion
         function runApp(appName) {
-            alert("Startar demo-miljö för " + appName + "...");
+            alert("Öppnar " + appName + ". Ingen installation påbörjas – applikationen startar direkt i din webbläsare.");
         }
     </script>
 
