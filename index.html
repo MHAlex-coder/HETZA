@@ -1,11 +1,143 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <title>Min GitHub-sida</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HETZA - Modern Design</title>
+    <link rel="icon" href="https://via.placeholder.com/32/000000/FFFFFF?text=HZ" type="image/x-icon"> <style>
+        /* Modern Hybrid CSS - Embedded Styles */
+        :root {
+            --primary-text-color: #f0f0f0;
+            --secondary-text-color: #aaaaaa;
+            --background-dark: #1a1a1a;
+            --container-bg: #222222;
+            --accent-color: #00ccff; /* En modern blå accent */
+            --border-color: #333333;
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family);
+            background-color: var(--background-dark);
+            color: var(--primary-text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow: hidden; /* För bakgrundsanimation */
+            position: relative;
+        }
+
+        /* Enkel bakgrundsanimation */
+        .background-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle, #333333 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.1;
+            animation: moveDots 60s linear infinite;
+        }
+
+        @keyframes moveDots {
+            from { background-position: 0 0; }
+            to { background-position: 4000px 4000px; }
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            padding: 40px 50px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            border: 1px solid var(--border-color);
+        }
+
+        .logo-img {
+            max-width: 250px; /* Justera storleken vid behov */
+            height: auto;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 8px rgba(0, 204, 255, 0.3)); /* Diskret glöd för loggan */
+        }
+
+        h1 {
+            color: var(--primary-text-color);
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        p {
+            color: var(--secondary-text-color);
+            font-size: 1.1em;
+            margin-bottom: 25px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--background-dark);
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 1.05em;
+        }
+
+        .button:hover {
+            background-color: #00e0ff; /* Ljusare vid hover */
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.85em;
+            color: var(--secondary-text-color);
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+        }
+        
+        /* Responsivitet */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .logo-img {
+                max-width: 200px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Hej 👋</h1>
-  <p>Detta är min GitHub Pages-hemsida.</p>
+    <div class="background-dots"></div>
+
+    <div class="container">
+        <img src="https://i.imgur.com/your-uploaded-hetza-logo.png" alt="HETZA Logo" class="logo-img">
+
+
+        <h1>HETZA</h1>
+        <p>
+            Välkommen till en plattform designad för effektivitet och analys. 
+            Vi strävar efter att leverera precision i varje detalj, med fokus 
+            på optimering och prestanda. Utforska våra lösningar för att 
+            skapa värde.
+        </p>
+        <a href="#" class="button">Läs Mer</a>
+        <p class="footer">© 2024 HETZA. Alla rättigheter reserverade.</p>
+    </div>
 </body>
 </html>
