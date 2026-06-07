@@ -1,327 +1,502 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HETZA - Portal</title>
-    <style>
-        :root {
-            --primary-text-color: #f0f0f0;
-            --secondary-text-color: #aaaaaa;
-            --background-dark: #1a1a1a;
-            --container-bg: #222222;
-            --accent-color: #00ccff;
-            --border-color: #333333;
-            --sidebar-bg: #151515;
-            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HETZA — Appar & Verktyg</title>
+  <style>
+    /* ─── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --bg:          #0d0f14;
+      --surface:     #13161e;
+      --card:        rgba(255,255,255,0.04);
+      --card-hover:  rgba(255,255,255,0.08);
+      --border:      rgba(255,255,255,0.08);
+      --border-glow: rgba(99,179,237,0.35);
+      --text:        #e2e8f0;
+      --muted:       #64748b;
+      --accent-1:    #63b3ed;   /* blå */
+      --accent-2:    #68d391;   /* grön */
+      --accent-3:    #f6ad55;   /* orange */
+      --accent-4:    #b794f4;   /* lila */
+      --radius:      14px;
+      --transition:  0.25s cubic-bezier(.4,0,.2,1);
+    }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: var(--font-family);
-            background-color: var(--background-dark);
-            color: var(--primary-text-color);
-            display: flex;
-            min-height: 100vh;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+    /* ─── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: 280px;
-            background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            padding: 40px 0;
-            position: fixed;
-            height: 100%;
-            z-index: 100;
-        }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
 
-        .logo-section {
-            padding: 0 30px 40px 30px;
-            text-align: center;
-            cursor: pointer;
-        }
+    /* animated gradient background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% -10%, rgba(99,179,237,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 110%, rgba(104,211,145,0.06) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-        .sidebar-logo {
-            max-width: 180px;
-            height: auto;
-        }
+    /* ─── Layout ────────────────────────────────────────────── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
 
-        .nav-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+    /* ─── Header ────────────────────────────────────────────── */
+    header {
+      padding: 4rem 0 3rem;
+      text-align: center;
+    }
 
-        .nav-link {
-            display: block;
-            padding: 15px 30px;
-            color: var(--primary-text-color);
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.3s;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
+    .logo {
+      display: inline-block;
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .5rem;
+    }
 
-        .nav-link:hover {
-            background-color: #222;
-            color: var(--accent-color);
-        }
+    .tagline {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
 
-        .submenu {
-            list-style: none;
-            padding: 0;
-            background: #111;
-            display: none; 
-        }
+    /* ─── Search ────────────────────────────────────────────── */
+    .search-wrap {
+      max-width: 480px;
+      margin: 2rem auto 0;
+      position: relative;
+    }
 
-        .submenu li a {
-            display: block;
-            padding: 12px 30px 12px 50px;
-            color: var(--secondary-text-color);
-            text-decoration: none;
-            font-size: 0.9em;
-            transition: 0.2s;
-            cursor: pointer;
-        }
+    .search-wrap svg {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
 
-        .submenu li a:hover {
-            color: var(--accent-color);
-            background: #1a1a1a;
-        }
+    #search {
+      width: 100%;
+      padding: .75rem 1rem .75rem 2.75rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text);
+      font-size: .95rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
 
-        .has-submenu.active .submenu {
-            display: block;
-        }
+    #search:focus {
+      border-color: var(--border-glow);
+      box-shadow: 0 0 0 3px rgba(99,179,237,.12);
+    }
 
-        .has-submenu .nav-link::after {
-            content: ' ▼';
-            font-size: 0.7em;
-            float: right;
-            margin-top: 5px;
-        }
+    #search::placeholder { color: var(--muted); }
 
-        /* --- CONTENT AREA --- */
-        .main-content {
-            margin-left: 280px;
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-        }
+    /* ─── Category Section ──────────────────────────────────── */
+    .category {
+      margin-top: 3.5rem;
+    }
 
-        .content-section {
-            display: none;
-            width: 100%;
-            max-width: 850px;
-            animation: fadeIn 0.5s;
-        }
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
 
-        .content-section.active {
-            display: block;
-        }
+    .category-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
 
-        .container {
-            background-color: var(--container-bg);
-            border-radius: 12px;
-            padding: 50px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
+    .category-title {
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+    }
 
-        /* App-länk stil */
-        .app-link {
-            display: inline-block;
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-top: 20px;
-            padding: 5px 0;
-            border-bottom: 1px solid transparent;
-            transition: 0.3s;
-        }
+    .category-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
 
-        .app-link:hover {
-            border-bottom: 1px solid var(--accent-color);
-            opacity: 0.8;
-        }
+    .category-count {
+      font-size: .8rem;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: .15rem .6rem;
+    }
 
-        .grid-features {
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 30px; 
-            margin: 30px 0;
-            text-align: left;
-        }
+    /* ─── Card Grid ─────────────────────────────────────────── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
 
-        .feature-item h3 { color: var(--accent-color); margin-bottom: 10px; }
+    /* ─── App Card ──────────────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      transition:
+        background var(--transition),
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+      cursor: pointer;
+    }
 
-        .cta-box {
-            background: rgba(0, 204, 255, 0.1); 
-            border: 1px solid var(--accent-color); 
-            padding: 25px; 
-            border-radius: 8px; 
-            text-align: center;
-            margin-top: 30px;
-        }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--card-accent, transparent) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity var(--transition);
+      border-radius: var(--radius);
+    }
 
-        .no-it-badge {
-            display: inline-block;
-            background: #10b981;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 600;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
+    .card:hover {
+      background: var(--card-hover);
+      border-color: var(--border-glow);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    }
 
-        h1 { font-size: 2.5em; margin-bottom: 10px; letter-spacing: 1px; text-align: center; }
-        p { color: var(--secondary-text-color); font-size: 1.1em; }
+    .card:hover::before { opacity: 1; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: .5rem;
+    }
 
-        @media (max-width: 900px) {
-            body { flex-direction: column; }
-            .sidebar { position: relative; width: 100%; height: auto; padding: 20px 0; }
-            .main-content { margin-left: 0; padding: 20px; }
-            .grid-features { grid-template-columns: 1fr; }
-        }
-    </style>
+    .card-icon {
+      font-size: 1.75rem;
+      line-height: 1;
+    }
+
+    .card-badge {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      border: 1px solid currentColor;
+      opacity: .7;
+    }
+
+    .card-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-desc {
+      font-size: .9rem;
+      color: var(--muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: .25rem;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .35rem;
+    }
+
+    .tag {
+      font-size: .72rem;
+      padding: .2rem .55rem;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+    }
+
+    .card-arrow {
+      color: var(--muted);
+      transition: transform var(--transition), color var(--transition);
+      flex-shrink: 0;
+    }
+
+    .card:hover .card-arrow {
+      transform: translate(3px, -3px);
+      color: var(--accent-1);
+    }
+
+    /* ─── Empty state ───────────────────────────────────────── */
+    .empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    /* ─── Footer ────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 4rem 0 2.5rem;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    footer a { color: var(--muted); text-underline-offset: 3px; }
+    footer a:hover { color: var(--text); }
+
+    /* ─── Responsive ────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .logo { font-size: 2rem; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="logo-section" onclick="showSection('home')">
-            <img src="hetza_logga_vit_t.png" alt="HETZA" class="sidebar-logo">
-        </div>
-        
-        <nav>
-            <ul class="nav-menu">
-                <li class="nav-item has-submenu" id="software-menu">
-                    <div class="nav-link">Mjukvaror</div>
-                    <ul class="submenu">
-                        <li><a onclick="showSection('grid-app')">HETZA-grid</a></li>
-                        <li><a onclick="showSection('ra-app')">HETZA-RA</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item"><a onclick="showSection('konsult')" class="nav-link">Konsulttjänster</a></li>
-                <li class="nav-item"><a onclick="showSection('home')" class="nav-link">Om oss</a></li>
-                <li class="nav-item"><a onclick="showSection('home')" class="nav-link">Kontakt</a></li>
-            </ul>
-        </nav>
-    </aside>
+<div class="wrapper">
 
-    <main class="main-content">
-        
-        <section id="home" class="content-section active">
-            <div class="container" style="text-align: center;">
-                <h1>HETZA Portal</h1>
-                <p>Välkommen till en plattform designad för effektivitet, analys och säkerhet. Välj en tjänst i menyn för att komma igång.</p>
-            </div>
-        </section>
+  <header>
+    <div class="logo">HETZA</div>
+    <p class="tagline">Appar &amp; verktyg byggda av Alexander Henke</p>
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input id="search" type="text" placeholder="Sök appar…" autocomplete="off" />
+    </div>
+  </header>
 
-        <section id="grid-app" class="content-section">
-            <div class="container">
-                <div style="text-align: center;"><span class="no-it-badge">Ingen IT-installation krävs</span></div>
-                <h1 style="color: var(--accent-color);">HETZA-grid</h1>
-                <p style="text-align: center; font-size: 1.2em; color: var(--primary-text-color);">Optimera din leveranskapacitet direkt i webbläsaren.</p>
-                
-                <div class="grid-features">
-                    <div class="feature-item">
-                        <h3>Omedelbar Start</h3>
-                        <p>Glöm långa väntetider på IT-godkännande. Ladda ned webapplikationen och börja planera direkt utan installation.</p>
-                    </div>
-                    <div class="feature-item">
-                        <h3>Strategisk Planering</h3>
-                        <p>Visualisera hela årets projektportfölj. Få full kontroll över beläggning på dags-, vecko- och årsbasis.</p>
-                    </div>
-                    <div class="feature-item">
-                        <h3>Kvalitetsförluster</h3>
-                        <p>Logga omarbete och "waste". Identifiera mönster och förbättringsområden med detaljerade rapporter.</p>
-                    </div>
-                    <div class="feature-item">
-                        <h3>Säker Data</h3>
-                        <p>All planering och data sparas lokalt i din webbläsare eller som JSON-filer. Ingen molnlagring krävs för driften.</p>
-                    </div>
-                </div>
+  <main id="main"></main>
 
-                <div class="cta-box">
-                    <h2 style="margin-top: 0;">Frihet att fokusera</h2>
-                    <p>HETZA-grid är byggt för att köras lokalt i din miljö. Ingen administratörsrättighet krävs – bara öppna och kör.</p>
-                    <a href="#" class="app-link" onclick="runApp('HETZA-grid')">🚀 Klicka här för att prova HETZA-grid Online</a>
-                </div>
-            </div>
-        </section>
+  <footer>
+    <p>© 2026 Hetza — <a href="https://github.com/mhalex-coder" target="_blank" rel="noopener">GitHub</a></p>
+  </footer>
 
-        <section id="ra-app" class="content-section">
-            <div class="container">
-                <div style="text-align: center;"><span class="no-it-badge">Körs direkt i webbläsaren</span></div>
-                <h1 style="color: var(--accent-color);">HETZA-RA</h1>
-                <p style="text-align: center; font-size: 1.2em; color: var(--primary-text-color);">Avancerad Risk- och Tillförlitlighetsanalys.</p>
-                
-                <div class="grid-features">
-                    <div class="feature-item">
-                        <h3>Ingen IT-process</h3>
-                        <p>Slipp krångliga säkerhetsgranskningar för lokala installationer. Applikationen körs som en lättviktig webbfil.</p>
-                    </div>
-                    <div class="feature-item">
-                        <h3>Riskidentifiering</h3>
-                        <p>Kartlägg potentiella sårbarheter i komplexa system med specialiserade algoritmer direkt vid skrivbordet.</p>
-                    </div>
-                </div>
+</div>
 
-                <div class="cta-box">
-                    <h2 style="margin-top: 0;">Säkra din drift idag</h2>
-                    <p>Få de insikter som krävs för att minimera oplanerade avbrott utan att behöva involvera en it-avdelning för godkännande.</p>
-                    <a href="#" class="app-link" onclick="runApp('HETZA-RA')">🔍 Klicka här för att prova HETZA-RA Online</a>
-                </div>
-            </div>
-        </section>
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   KONFIGURATION — Lägg till / redigera appar här
+   ═══════════════════════════════════════════════════════════════
 
-        <section id="konsult" class="content-section">
-            <div class="container" style="text-align: center;">
-                <h1>Konsulttjänster</h1>
-                <p>Vi erbjuder teknisk rådgivning och skräddarsydda analyslösningar för din verksamhet.</p>
-            </div>
-        </section>
+   Fält per app:
+     name    — Visningsnamn  (obligatoriskt)
+     desc    — Kort beskrivning
+     url     — Länk till repo eller live-app
+     icon    — Emoji-ikon
+     badge   — Kort status-badge, t.ex. "Live", "Beta", "WIP"
+     tags    — Array med tekniker / nyckelord
+     accent  — Accentfärg för kort-hover (valfritt)
 
-    </main>
+   Lägg till en ny app genom att kopiera ett objekt och justera värdena.
+═══════════════════════════════════════════════════════════════ */
 
-    <script>
-        document.getElementById('software-menu').addEventListener('click', function(e) {
-            if(e.target.classList.contains('nav-link')) {
-                this.classList.toggle('active');
-            }
-        });
+const CATEGORIES = [
+  {
+    id: "ekonomi",
+    name: "Privat Ekonomi",
+    color: "#68d391",   /* grön */
+    apps: [
+      {
+        name: "Aktie-Screener",
+        desc: "Screena och filtrera aktier efter nyckeltal för att hitta investeringsmöjligheter.",
+        url: "https://mhalex-coder.github.io/aktie",
+        icon: "📈",
+        badge: "Live",
+        tags: ["Aktier", "Screener"],
+        accent: "rgba(104,211,145,0.08)",
+      },
+      {
+        name: "FIRE-Kalkylator",
+        desc: "Planera ekonomiskt oberoende med hinkstrategin — beräkna när du kan gå i pension.",
+        url: "https://mhalex-coder.github.io/FIRE",
+        icon: "🔥",
+        badge: "Live",
+        tags: ["FIRE", "Pensionsplanering"],
+        accent: "rgba(246,173,85,0.08)",
+      },
+      /* ── Lägg till fler ekonomi-appar här ── */
+    ],
+  },
+  {
+    id: "automation",
+    name: "Industriell Automation",
+    color: "#63b3ed",   /* blå */
+    apps: [
+      {
+        name: "Toolbox",
+        desc: "Svit av eldesignverktyg för skåpbyggare och automationsingenjörer — märkning, effektberäkning och säkerhet.",
+        url: "https://mhalex-coder.github.io/toolbox",
+        icon: "🧰",
+        badge: "Live",
+        tags: ["El-design", "Beräkning", "IEC"],
+        accent: "rgba(99,179,237,0.08)",
+      },
+      {
+        name: "Safe Distance",
+        desc: "Beräkna minsta skyddsavstånd för skyddsanordningar enligt maskindirektivet och ISO 13855.",
+        url: "https://mhalex-coder.github.io/safedistance",
+        icon: "🛡️",
+        badge: "Live",
+        tags: ["Säkerhet", "ISO 13855", "Maskindirektivet"],
+        accent: "rgba(183,148,244,0.08)",
+      },
+      {
+        name: "Building Blocks",
+        desc: "Modulär arkitektur för automationssystem — bygg och visualisera systemblocksdiagram.",
+        url: "https://mhalex-coder.github.io/BB",
+        icon: "🧱",
+        badge: "Live",
+        tags: ["Arkitektur", "Modulär"],
+        accent: "rgba(99,179,237,0.08)",
+      },
+      {
+        name: "TimeGrid",
+        desc: "Kapacitetsplaneringsverktyg för projekt och resurser med visuellt schema, rapporter och beläggningsanalys.",
+        url: "https://mhalex-coder.github.io/Timegrid",
+        icon: "📅",
+        badge: "Live",
+        tags: ["Kapacitetsplanering", "Resursallokering"],
+        accent: "rgba(104,211,145,0.08)",
+      },
+      /* ── Lägg till fler automation-appar här ── */
+    ],
+  },
+];
 
-        function showSection(sectionId) {
-            const sections = document.querySelectorAll('.content-section');
-            sections.forEach(s => s.classList.remove('active'));
+/* ════════════════════════════════════════════════════════════════
+   Renderingslogik — rör ej om du inte vill ändra layout
+════════════════════════════════════════════════════════════════ */
 
-            const activeSection = document.getElementById(sectionId);
-            if(activeSection) {
-                activeSection.classList.add('active');
-                window.scrollTo(0, 0);
-            }
-        }
+function buildCard(app) {
+  const a = document.createElement("a");
+  a.className = "card";
+  a.href = app.url || "#";
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  if (app.accent) a.style.setProperty("--card-accent", app.accent);
 
-        function runApp(appName) {
-            alert("Öppnar " + appName + ". Ingen installation påbörjas – applikationen startar direkt i din webbläsare.");
-        }
-    </script>
+  a.innerHTML = `
+    <div class="card-top">
+      <span class="card-icon">${app.icon ?? "📦"}</span>
+      ${app.badge ? `<span class="card-badge">${app.badge}</span>` : ""}
+    </div>
+    <div class="card-name">${app.name}</div>
+    <div class="card-desc">${app.desc ?? ""}</div>
+    <div class="card-footer">
+      <div class="card-tags">
+        ${(app.tags ?? []).map(t => `<span class="tag">${t}</span>`).join("")}
+      </div>
+      <svg class="card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2">
+        <path d="M7 17 17 7M7 7h10v10"/>
+      </svg>
+    </div>`;
+  return a;
+}
 
+function buildCategory(cat) {
+  const section = document.createElement("section");
+  section.className = "category";
+  section.dataset.id = cat.id;
+
+  const header = document.createElement("div");
+  header.className = "category-header";
+  header.innerHTML = `
+    <span class="category-dot" style="background:${cat.color}"></span>
+    <span class="category-title">${cat.name}</span>
+    <span class="category-line"></span>
+    <span class="category-count">${cat.apps.length}</span>`;
+
+  const grid = document.createElement("div");
+  grid.className = "card-grid";
+
+  cat.apps.forEach(app => grid.appendChild(buildCard(app)));
+
+  section.appendChild(header);
+  section.appendChild(grid);
+  return section;
+}
+
+function render(query = "") {
+  const main = document.getElementById("main");
+  main.innerHTML = "";
+  const q = query.toLowerCase().trim();
+
+  CATEGORIES.forEach(cat => {
+    const filtered = q
+      ? cat.apps.filter(a =>
+          [a.name, a.desc, ...(a.tags ?? [])].join(" ").toLowerCase().includes(q))
+      : cat.apps;
+
+    if (q && filtered.length === 0) return;
+
+    const catClone = { ...cat, apps: q ? filtered : cat.apps };
+    const section = buildCategory(catClone);
+
+    if (q && filtered.length === 0) {
+      section.querySelector(".card-grid").innerHTML =
+        `<div class="empty">Inga träffar i denna kategori.</div>`;
+    }
+
+    main.appendChild(section);
+  });
+
+  if (!main.children.length) {
+    main.innerHTML = `<div class="empty" style="margin-top:3rem">
+      Inga appar matchar "<strong>${query}</strong>".</div>`;
+  }
+}
+
+document.getElementById("search").addEventListener("input", e => render(e.target.value));
+render();
+</script>
 </body>
 </html>
