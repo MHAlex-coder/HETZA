@@ -296,11 +296,104 @@
       .logo { font-size: 2rem; }
       .card-grid { grid-template-columns: 1fr; }
     }
+
+    /* ─── Lock Screen ───────────────────────────────────────── */
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+    }
+
+    #lock-screen.hidden { display: none; }
+
+    .lock-card {
+      width: 100%;
+      max-width: 340px;
+      padding: 2.5rem 2rem;
+      margin: 0 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+    }
+
+    .lock-logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .3rem;
+    }
+
+    .lock-hint {
+      color: var(--muted);
+      font-size: .85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    #lock-password {
+      width: 100%;
+      padding: .7rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: .95rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    #lock-password:focus {
+      border-color: var(--border-glow);
+      box-shadow: 0 0 0 3px rgba(99,179,237,.12);
+    }
+
+    #lock-submit {
+      width: 100%;
+      margin-top: .75rem;
+      padding: .7rem 1rem;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      border: none;
+      border-radius: 10px;
+      color: #0d0f14;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+
+    #lock-submit:hover { opacity: .9; transform: translateY(-1px); }
+
+    #lock-error {
+      margin-top: .9rem;
+      font-size: .82rem;
+      color: #fc8181;
+      min-height: 1.1em;
+    }
+
+    .wrapper.hidden { display: none; }
   </style>
 </head>
 <body>
 
-<div class="wrapper">
+<div id="lock-screen">
+  <div class="lock-card">
+    <div class="lock-logo">HETZA</div>
+    <p class="lock-hint">Ange lösenord för att fortsätta</p>
+    <input id="lock-password" type="password" placeholder="Lösenord" autocomplete="off" autofocus />
+    <button id="lock-submit">Lås upp</button>
+    <p id="lock-error"></p>
+  </div>
+</div>
+
+<div class="wrapper hidden" id="wrapper">
 
   <header>
     <div class="logo">HETZA</div>
@@ -322,6 +415,57 @@
 </div>
 
 <script>
+/* ═══════════════════════════════════════════════════════════════
+   LÅSSKÄRM — enkel klientsidsspärr
+
+   OBS: Detta är INTE riktig säkerhet — det är en enkel spärr som
+   döljer länkarna för slumpmässiga besökare. Lösenordet lagras
+   som en SHA-256-hash nedan istället för i klartext, men koden är
+   fortfarande synlig för alla och går att kringgå via DevTools.
+
+   Byt lösenord: kör i webbläsarens konsol
+     crypto.subtle.digest("SHA-256", new TextEncoder().encode("nytt-lösenord"))
+       .then(b => console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")))
+   och klistra in resultatet nedan.
+═══════════════════════════════════════════════════════════════ */
+
+const LOCK_PASSWORD_HASH = "890d29e6bf063536d325915d8bd216ddd7c444e97a63264c13fc2dc5505ec064";
+const LOCK_STORAGE_KEY = "hetza_unlocked";
+
+async function sha256(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+function unlockSite() {
+  document.getElementById("lock-screen").classList.add("hidden");
+  document.getElementById("wrapper").classList.remove("hidden");
+}
+
+async function attemptUnlock() {
+  const input = document.getElementById("lock-password");
+  const error = document.getElementById("lock-error");
+  const hash = await sha256(input.value);
+
+  if (hash === LOCK_PASSWORD_HASH) {
+    sessionStorage.setItem(LOCK_STORAGE_KEY, "1");
+    unlockSite();
+  } else {
+    error.textContent = "Fel lösenord, försök igen.";
+    input.value = "";
+    input.focus();
+  }
+}
+
+if (sessionStorage.getItem(LOCK_STORAGE_KEY) === "1") {
+  unlockSite();
+} else {
+  document.getElementById("lock-submit").addEventListener("click", attemptUnlock);
+  document.getElementById("lock-password").addEventListener("keydown", e => {
+    if (e.key === "Enter") attemptUnlock();
+  });
+}
+
 /* ═══════════════════════════════════════════════════════════════
    KONFIGURATION — Lägg till / redigera appar här
    ═══════════════════════════════════════════════════════════════
